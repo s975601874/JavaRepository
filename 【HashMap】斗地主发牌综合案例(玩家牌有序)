@@ -1,0 +1,77 @@
+public class Demo02 {
+    public static void main(String[] args) {
+        int pokerNum = 54;
+        //1.生成扑克牌,并用Map集合存储扑克和其索引
+        String[] color = {"♠", "♣", "♥", "♦"};
+        String[] number = {"2", "A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3"};
+        HashMap<Integer, String> pokers = new HashMap<>();
+        pokers.put(0,"大王");
+        pokers.put(1, "小王");
+        //设置扑克牌的索引(注意将遍历number放在遍历color的上面)
+        int index = 2;
+        for (int j = 0; j < number.length; j++) {
+            for (int i = 0; i < color.length; i++) {
+                String poker = color[i] + number[j];
+                pokers.put(index, poker);
+                index++;
+            }
+        }
+        //设置三个玩家和底牌
+        ArrayList<Integer> player01 = new ArrayList<>();
+        ArrayList<Integer> player02 = new ArrayList<>();
+        ArrayList<Integer> player03 = new ArrayList<>();
+        ArrayList<Integer> diPai = new ArrayList<>();
+        //2.洗牌（洗索引）
+        ArrayList<Integer> listPoker = new ArrayList<>();
+        Set<Map.Entry<Integer, String>> entries = pokers.entrySet();
+        for (Map.Entry<Integer, String> entry : entries) {
+            Integer key = entry.getKey();
+            listPoker.add(key);
+        }
+        //洗牌
+        Collections.shuffle(listPoker);
+        //3.发牌--底牌3张，玩家1，2，3为17张，17张，17张，且轮流抽牌
+        for (int i = 0; i < pokerNum; i++) {
+            if (i == 0 || i == 1 || i == 2) {
+                diPai.add(listPoker.get(i));
+            }else if(i%3 == 0){
+                player01.add(listPoker.get(i));
+            }else if(i%3 == 1){
+                player02.add(listPoker.get(i));
+            }else if(i%3 == 2){
+                player03.add(listPoker.get(i));
+            }
+        }
+//        System.out.println(diPai);
+//        System.out.println(player01);
+//        System.out.println(player02);
+//        System.out.println(player03);
+        //对玩家1，玩家2和玩家3的牌进行排序
+        Collections.sort(player01);
+        Collections.sort(player02);
+        Collections.sort(player03);
+
+        ArrayList<String> player01Pokers = new ArrayList<>();
+        ArrayList<String> player02Pokers = new ArrayList<>();
+        ArrayList<String> player03Pokers = new ArrayList<>();
+        ArrayList<String> diPaiPokers = new ArrayList<>();
+        //通过索引获取扑克
+        for (Integer paiIndex : player01) {
+             player01Pokers.add(pokers.get(paiIndex));
+        }
+        for (Integer paiIndex : player02) {
+            player02Pokers.add(pokers.get(paiIndex));
+        }
+        for (Integer paiIndex : player03) {
+            player03Pokers.add(pokers.get(paiIndex));
+        }
+        for (Integer paiIndex : diPai) {
+            diPaiPokers.add(pokers.get(paiIndex));
+        }
+        //4.看牌
+        System.out.println("底牌:"+diPaiPokers);
+        System.out.println("玩家01:"+player01Pokers);
+        System.out.println("玩家02:"+player02Pokers);
+        System.out.println("玩家03:"+player03Pokers);
+    }
+}
